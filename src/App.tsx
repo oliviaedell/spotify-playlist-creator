@@ -10,39 +10,43 @@ import Playlists from './pages/PlaylistsPage'
 import PlaylistDetails from './pages/PlaylistDetailsPage'
 
 
+type AppProps = {
+  path:string,
+  userLoggedIn:boolean //TODO useState to set userLoggedIn
+}
+
+
+
+const Page = ({path, userLoggedIn} : AppProps) => {
+switch(path) {
+  case 'login':
+    return <Login />
+     
+  case 'current-song':
+    return <CurrentSong />
+
+  case 'playlists':
+    return <Playlists />
+  
+  case 'playlist-details':
+    return <PlaylistDetails />
+
+  default:
+    return (
+      userLoggedIn ? <CurrentSong /> : <Login />
+    )
+
+
+}
+  
+}
 function App() {
 
-  type AppProps = {
-    path:string
-  }
-
-
-
-const Page = ({path} : AppProps) => {
-  switch(path) {
-    case 'login':
-      return <Login />
-       
-    case 'current-song':
-      return <CurrentSong />
-
-    case 'playlists':
-      return <Playlists />
-    
-    case 'playlist-details':
-      return <PlaylistDetails />
-
-    default:
-      return <></>
-
-  
-  }
-    
-}
+ 
  
   return (
     <div className="App">
-      <Page path = {window.location.pathname.split('/')[1]}/>
+      <Page path = {window.location.pathname.split('/')[1]} userLoggedIn = {true}/>
     </div>
   )
 
