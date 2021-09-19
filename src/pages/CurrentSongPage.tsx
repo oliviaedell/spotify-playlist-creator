@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
+
+import NewPlaylistModal from "../components/NewPlaylistModal"
+import CurrentSongCard from "../components/CurrentSongCard"
+
 import "./CurrentSongPage.css"
 
 const USER_ENDPOINT = "https://api.spotify.com/v1/me"
@@ -123,6 +127,7 @@ const CurrentSong = () => {
   const [user, setUser] = useState<User>()
   const [currentSong, setCurrentSong] = useState<Track>()
   const [seconds, setSeconds] = useState<number>(0)
+  const [showModal, setShowModal] = useState<boolean>(false)
 
   /* set access token */
   useEffect(() => {
@@ -166,10 +171,30 @@ const CurrentSong = () => {
     }
   }, [accessToken, user])
 
+  //   const handleShowModal = () => {
+  //     setShowModal(true)
+  //   }
+
   return (
     <>
       <h1>Current Song</h1>
+      {currentSong ? (
+        <>
+          <CurrentSongCard
+            currentSong={currentSong}
+            setShowModal={setShowModal}
+          />
+
+          <NewPlaylistModal
+            show={showModal}
+            setShow={setShowModal}
+          ></NewPlaylistModal>
+        </>
+      ) : (
+        <h2>no song currently playing</h2>
+      )}
     </>
   )
 }
 export default CurrentSong
+export type { Track }
