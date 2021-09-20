@@ -27,7 +27,7 @@ const CurrentSong = () => {
   const [user, setUser] = useState<User>()
   const [currentSong, setCurrentSong] = useState<Track>()
   const [storedSongName, setStoredSongName] = useState<string>()
-
+  const [contentLoaded, setContentLoaded] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(false)
 
   /* set access token */
@@ -67,11 +67,18 @@ const CurrentSong = () => {
         })
           .then((response) => {
             response.json().then((data) => setCurrentSong(data as Track))
+            //setContentLoaded(true)
           })
           .catch((err) => console.log(err))
       }, 1000)
     }
   }, [accessToken, user])
+
+  useEffect(() => {
+    if (currentSong) {
+      setContentLoaded(true)
+    }
+  }, [currentSong])
 
   useEffect(() => {
     if (accessToken && user && currentSong) {
@@ -82,31 +89,32 @@ const CurrentSong = () => {
     }
   }, [accessToken, user, currentSong, storedSongName])
 
-  return (
+  return !accessToken ? (
+    <>
+      <h2>
+        Please <a href="/login">log in</a> to Spotify
+      </h2>
+    </>
+  ) : (
     <>
       <h3>You are currently listening to: </h3>
-      {currentSong ? (
-        <>
-          <CurrentSongCard
-            currentSong={currentSong}
-            setShowModal={setShowModal}
-          />
+      <CurrentSongCard
+        loaded={contentLoaded}
+        currentSong={currentSong}
+        setShowModal={setShowModal}
+      />
 
-          <NewPlaylistModal
-            show={showModal}
-            setShow={setShowModal}
-            currentSong={currentSong}
-          ></NewPlaylistModal>
-        </>
-      ) : accessToken ? (
-        <h2>no song currently playing</h2>
+      {currentSong ? (
+        <NewPlaylistModal
+          show={showModal}
+          setShow={setShowModal}
+          currentSong={currentSong}
+        ></NewPlaylistModal>
       ) : (
-        <h2>
-          Please <a href="/login">log in</a> to Spotify
-        </h2>
+        <></>
       )}
     </>
   )
 }
+
 export default CurrentSong
-export type { Track }
