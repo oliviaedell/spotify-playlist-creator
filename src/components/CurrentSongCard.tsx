@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react"
 import Card from "react-bootstrap/Card"
 import Dropdown from "react-bootstrap/Dropdown"
-import type { Track } from "../pages/CurrentSongPage"
+import type { Track, Playlist } from "../Types"
 
 import "./CurrentSongCard.css"
 
@@ -10,16 +11,33 @@ type cardProps = {
 }
 
 const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
+  const [currentPlaylists, setCurrentPlaylists] = useState<Playlist[]>()
+
+  useEffect(() => {
+    if (localStorage.playlists) {
+      setCurrentPlaylists(JSON.parse(localStorage.playlists))
+    }
+  }, [])
+
   const handleShowModal = () => {
     setShowModal(true)
   }
+
+  const handleAddTrack = (i: number) => {
+    //TODO add track to playlist in local storage using setCurrentPlaylists
+  }
+
   return (
     <Card className="songCard" style={{ width: "18rem" }}>
       <Card.Body>
         <Card.Img
           className="albumImg"
           variant="top"
-          src={currentSong ? currentSong.item.album.images[0].url : ""}
+          src={
+            currentSong.item.album.images
+              ? currentSong.item.album.images[0].url
+              : ""
+          }
         />
         <Card.Title>{currentSong ? `${currentSong.item.name}` : ""}</Card.Title>
         <Card.Subtitle>
@@ -29,12 +47,25 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
           <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
             Add to Playlist
           </Dropdown.Toggle>
-
           <Dropdown.Menu>
-            <Dropdown.Item onClick={handleShowModal}>
+            <Dropdown.Item
+              className="newPlaylistItem"
+              onClick={handleShowModal}
+            >
               Create New Playlist
             </Dropdown.Item>
-            <Dropdown.Divider />
+            {currentPlaylists ? (
+              currentPlaylists.map((playlist, i) => (
+                <Dropdown.Item
+                  className="existingPlaylistItem"
+                  onClick={() => handleAddTrack(i)}
+                >
+                  {playlist.name}
+                </Dropdown.Item>
+              ))
+            ) : (
+              <></>
+            )}
           </Dropdown.Menu>
         </Dropdown>
       </Card.Body>
