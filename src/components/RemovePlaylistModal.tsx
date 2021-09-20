@@ -28,17 +28,16 @@ const RemovePlaylistModal = ({
     console.log(currentPlaylists.length)
     console.log(playlist.id)
     currentPlaylists.splice(playlist.id, 1)
-    //setCurrentPlaylists(arr)
     setRemoved(true)
   }
 
   useEffect(() => {
-    //if removedtrue update storage
+    //if removed true update storage
     if (currentPlaylists && removed) {
       localStorage.setItem("playlists", JSON.stringify(currentPlaylists))
       setRemoved(false)
       setShowModal(false)
-      //window.location.pathname = "/playlists"
+      window.location.pathname = "/playlists"
     }
   }, [removed])
 

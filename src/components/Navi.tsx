@@ -5,7 +5,7 @@ import "./Navi.css"
 
 const Navi = () => {
   const handleLogout = () => {
-    localStorage.remove("accessToken")
+    localStorage.removeItem("accessToken")
   }
   return (
     <>
@@ -23,7 +23,7 @@ const Navi = () => {
               onClick={handleLogout}
               className="align-self-end"
             >
-              Log out
+              {localStorage.accessToken ? "Log out" : "Log in"}
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

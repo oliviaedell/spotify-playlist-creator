@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Alert, ToastHeader } from "react-bootstrap"
+import { ToastHeader } from "react-bootstrap"
 import Card from "react-bootstrap/Card"
 import Dropdown from "react-bootstrap/Dropdown"
 import Toast from "react-bootstrap/Toast"
@@ -17,7 +17,9 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
   const [selectedPlaylistID, setSelectedPlaylistID] = useState<number>(-1)
   const [newTracklist, setNewTracklist] = useState<Array<Track>>([])
   const [trackAdded, setTrackAdded] = useState<boolean>()
-  const [showAlert, setShowAlert] = useState<boolean>(false)
+  const [showNewTrackAlert, setShowNewTrackAlert] = useState<boolean>(false)
+  // TODO const [showNewPlaylistAlert, setShowNewPlaylistAlert] =
+  // useState<boolean>(false)
 
   useEffect(() => {
     if (localStorage.playlists) {
@@ -30,7 +32,7 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
   }
 
   const handleAddTrack = (playlistID: number) => {
-    //TODO add track to playlist in local storage using setCurrentPlaylists
+    //add track to playlist in local storage using setCurrentPlaylists
     if (currentPlaylists) {
       setSelectedPlaylistID(playlistID)
       setNewTracklist([...currentPlaylists[playlistID].tracks, currentSong])
@@ -43,8 +45,7 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
     if (trackAdded && currentPlaylists) {
       currentPlaylists[selectedPlaylistID].tracks = newTracklist
       localStorage.setItem("playlists", JSON.stringify(currentPlaylists))
-      setShowAlert(true)
-      //window.location.pathname = "/playlists"
+      setShowNewTrackAlert(true)
     }
   }, [trackAdded])
 
@@ -68,7 +69,7 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
             {currentSong ? `${currentSong.item.artists[0].name}` : ""}
           </Card.Subtitle>
           <Dropdown>
-            <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
+            <Dropdown.Toggle variant="outline-dark">
               Add to Playlist
             </Dropdown.Toggle>
             <Dropdown.Menu>
@@ -95,7 +96,10 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
         </Card.Body>
       </Card>
 
-      <Toast show={showAlert} onClose={() => setShowAlert(!showAlert)}>
+      <Toast
+        show={showNewTrackAlert}
+        onClose={() => setShowNewTrackAlert(!showNewTrackAlert)}
+      >
         <ToastHeader />
         <Toast.Body>
           Track added to{" "}

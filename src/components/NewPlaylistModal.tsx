@@ -6,8 +6,6 @@ import type { Track, Playlist } from "../Types"
 
 import "./NewPlaylistModal.css"
 
-//TODO: create form and persist playlist (localstorage)
-
 type modalProps = {
   show: boolean
   setShow: (show: boolean) => void
@@ -57,7 +55,6 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
       setSubmitted(true)
       window.location.reload()
     }
-    //TODO else error
   }
   useEffect(() => {
     if (submitted) {

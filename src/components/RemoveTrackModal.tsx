@@ -27,9 +27,6 @@ const RemoveTrackModal = ({
     setSelectedTrack(playlist.tracks[selectedTrackID])
   }, [])
 
-  // const handleShowModal = () => {
-  //   setShowModal(!showModal)
-  // }
   const handleConfirmRemove = () => {
     if (storedPlaylists && playlist.tracks) {
       playlist.tracks.splice(selectedTrackID, 1)

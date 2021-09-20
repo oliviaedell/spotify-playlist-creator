@@ -36,7 +36,6 @@ const CurrentSong = () => {
       const authParams = getAuthParams(window.location.hash.substring(1))
       setAccessToken(authParams["access_token"])
     } else if (localStorage.accessToken) {
-      console.log("get access token")
       setAccessToken(localStorage.accessToken)
     }
   }, [])
@@ -99,8 +98,12 @@ const CurrentSong = () => {
             currentSong={currentSong}
           ></NewPlaylistModal>
         </>
-      ) : (
+      ) : accessToken ? (
         <h2>no song currently playing</h2>
+      ) : (
+        <h2>
+          Please <a href="/login">log in</a> to Spotify
+        </h2>
       )}
     </>
   )
