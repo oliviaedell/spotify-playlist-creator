@@ -11,7 +11,10 @@ type cardProps = {
 }
 
 const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
-  const [currentPlaylists, setCurrentPlaylists] = useState<Playlist[]>()
+  const [currentPlaylists, setCurrentPlaylists] = useState<Array<Playlist>>()
+  const [selectedPlaylistID, setSelectedPlaylistID] = useState<number>(-1)
+  const [newTracklist, setNewTracklist] = useState<Array<Track>>([])
+  const [trackAdded, setTrackAdded] = useState<boolean>()
 
   useEffect(() => {
     if (localStorage.playlists) {
@@ -23,9 +26,22 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
     setShowModal(true)
   }
 
-  const handleAddTrack = (i: number) => {
+  const handleAddTrack = (playlistID: number) => {
     //TODO add track to playlist in local storage using setCurrentPlaylists
+    if (currentPlaylists) {
+      setSelectedPlaylistID(playlistID)
+      setNewTracklist([...currentPlaylists[playlistID].tracks, currentSong])
+      currentPlaylists[playlistID].tracks = newTracklist
+      setTrackAdded(true)
+    }
   }
+
+  useEffect(() => {
+    if (trackAdded && currentPlaylists) {
+      currentPlaylists[selectedPlaylistID].tracks = newTracklist
+      localStorage.setItem("playlists", JSON.stringify(currentPlaylists))
+    }
+  })
 
   return (
     <Card className="songCard" style={{ width: "18rem" }}>
