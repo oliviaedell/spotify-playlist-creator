@@ -8,7 +8,9 @@ const Playlists = () => {
 
   useEffect(() => {
     //get playlists from localstorage
-    setPlaylists(JSON.parse(localStorage.playlists))
+    if (localStorage.playlists) {
+      setPlaylists(JSON.parse(localStorage.playlists))
+    }
   }, [])
 
   return (

@@ -5,7 +5,7 @@ import "./Navi.css"
 
 const Navi = () => {
   const handleLogout = () => {
-    localStorage.removeItem("accessToken")
+    localStorage.clear()
   }
   return (
     <>

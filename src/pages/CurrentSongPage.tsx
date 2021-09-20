@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react"
-//import axios from "axios"
-
 import NewPlaylistModal from "../components/NewPlaylistModal"
 import CurrentSongCard from "../components/CurrentSongCard"
 import type { User, Track } from "../Types"
@@ -51,8 +49,9 @@ const CurrentSong = () => {
         },
       })
         .then((response) => {
-          response.json().then((data) => setUser(data as User))
+          return response.json()
         })
+        .then((data) => setUser(data as User))
         .catch((err) => console.log(err))
     }
   }, [accessToken])
@@ -66,23 +65,19 @@ const CurrentSong = () => {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
           .then((response) => {
-            response.json().then((data) => setCurrentSong(data as Track))
+            return response.json()
           })
+          .then((data) => setCurrentSong(data as Track))
           .catch((err) => console.log(err))
       }, 1000)
     }
   }, [accessToken, user])
 
   useEffect(() => {
-    if (currentSong) {
-      setContentLoaded(true)
-    }
-  }, [currentSong])
-
-  useEffect(() => {
     if (accessToken && user && currentSong) {
       if (!storedSongName || currentSong.item.name !== storedSongName) {
         setStoredSongName(currentSong.item.name)
+        setContentLoaded(true)
         localStorage.setItem("currentSong", JSON.stringify(currentSong))
       }
     }
