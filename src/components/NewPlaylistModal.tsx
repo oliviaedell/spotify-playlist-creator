@@ -1,17 +1,80 @@
+import React, { useEffect, useState } from "react"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
+import Form from "react-bootstrap/Form"
+import type { Track, Playlist } from "../Types"
 
 import "./NewPlaylistModal.css"
+
+//TODO: create form and persist playlist (localstorage)
 
 type modalProps = {
   show: boolean
   setShow: (show: boolean) => void
+  currentSong: Track
 }
 
-const NewPlaylistModal = ({ show, setShow }: modalProps) => {
+const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
+  const [storedPlaylists, setStoredPlaylists] = useState<Array<Playlist>>([])
+  const [playlistName, setPlaylistName] = useState<string>()
+  const [playlistDescription, setPlaylistDescription] = useState<string>()
+  const [submitted, setSubmitted] = useState<boolean>(false)
+
+  useEffect(() => {
+    //get playlists from storage
+    if (localStorage.playlists) {
+      const playlists: Playlist[] = JSON.parse(localStorage.playlists)
+      if (playlists) {
+        setStoredPlaylists(playlists)
+      }
+    }
+  }, [])
+
   const handleCloseModal = () => {
     setShow(false)
   }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    //save playlist to local storage
+    if (playlistName) {
+      const newPlaylist: Playlist = {
+        description: playlistDescription,
+        name: playlistName,
+        tracks: {
+          items: [currentSong],
+        },
+        type: "playlist",
+      }
+
+      if (storedPlaylists.length !== 0) {
+        //console.log(newPlaylist)
+        setStoredPlaylists((storedPlaylists) => [
+          ...storedPlaylists,
+          newPlaylist,
+        ])
+        console.log(storedPlaylists)
+      } else {
+        console.log(newPlaylist)
+        const arr = new Array<Playlist>(newPlaylist)
+        console.log(arr)
+        setStoredPlaylists(arr)
+        setSubmitted(true)
+        // console.log(storedPlaylists)
+
+        //handleCloseModal()
+      }
+    }
+    //handleCloseModal()
+
+    window.location.reload()
+  }
+  useEffect(() => {
+    if (submitted) {
+      localStorage.setItem("playlists", JSON.stringify(storedPlaylists))
+      handleCloseModal()
+    }
+  }, [submitted])
 
   return (
     <>
@@ -19,10 +82,41 @@ const NewPlaylistModal = ({ show, setShow }: modalProps) => {
         <Modal.Header closeButton>
           <Modal.Title>Create New Playlist</Modal.Title>
         </Modal.Header>
-        <Modal.Body>TODO form to create playlist</Modal.Body>
-        <Button variant="outline-dark" onClick={handleCloseModal}>
-          DONE
-        </Button>
+        <Modal.Body>
+          <p>
+            Create new playlist with {currentSong.item.name} by{" "}
+            {currentSong.item.artists[0].name}
+          </p>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="newPlaylistName">
+              <Form.Label>Playlist Name</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={(e) => {
+                  setPlaylistName(e.target.value)
+                }}
+              />
+            </Form.Group>
+            <Form.Group controlId="newPlaylistDescription">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                onChange={(e) => {
+                  setPlaylistDescription(e.target.value)
+                }}
+              />
+            </Form.Group>
+            <Button
+              className="submitButton"
+              variant="outline-dark"
+              type="submit"
+            >
+              DONE
+            </Button>
+          </Form>
+        </Modal.Body>
+
         <Modal.Footer></Modal.Footer>
       </Modal>
     </>
