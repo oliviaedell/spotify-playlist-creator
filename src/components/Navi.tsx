@@ -23,7 +23,7 @@ const Navi = () => {
               onClick={handleLogout}
               className="align-self-end"
             >
-              {localStorage.accessToken ? "Log out" : "Log in"}
+              {window.location.pathname === "/login" ? "Log In" : "Log Out"}
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

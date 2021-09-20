@@ -40,7 +40,7 @@ function App() {
   const [queryString, setQueryString] = useState<string>()
 
   useEffect(() => {
-    setPath(window.location.pathname.split("/")[1].split("?")[0])
+    setPath(window.location.pathname.split("/")[1])
     setQueryString(window.location.href.split("?")[1])
   }, [])
   return (
