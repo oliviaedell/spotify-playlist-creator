@@ -36,12 +36,6 @@ const CurrentSong = () => {
     if (window.location.hash) {
       const authParams = getAuthParams(window.location.hash.substring(1))
       setAccessToken(authParams["access_token"])
-
-      // //store access token
-      // localStorage.clear()
-      // if (accessToken) {
-      //   localStorage.setItem("accessToken", accessToken)
-      // }
     }
   }, [])
 
@@ -54,9 +48,6 @@ const CurrentSong = () => {
         })
         .then((response) => {
           setUser(response.data as User)
-          // if (user) {
-          //   localStorage.setItem("user", JSON.stringify(user))
-          // }
         })
         .catch((err) => console.log(err))
     }
@@ -76,8 +67,6 @@ const CurrentSong = () => {
             setCurrentSong(response.data as Track)
           })
           .catch((err) => console.log(err))
-
-        // setSeconds((seconds) => seconds + 1)
       }, 1000)
     }
   }, [accessToken, user])

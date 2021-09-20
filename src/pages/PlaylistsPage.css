@@ -1,0 +1,7 @@
+.playlist-card {
+  margin: 1em;
+  transition: all ease 200ms;
+}
+.playlist-card:hover {
+  background: #f0f0f0;
+}

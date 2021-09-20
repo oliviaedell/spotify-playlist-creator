@@ -48,7 +48,6 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
       }
 
       if (storedPlaylists.length !== 0) {
-        //console.log(newPlaylist)
         setStoredPlaylists((storedPlaylists) => [
           ...storedPlaylists,
           newPlaylist,
@@ -60,12 +59,8 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
         console.log(arr)
         setStoredPlaylists(arr)
         setSubmitted(true)
-        // console.log(storedPlaylists)
-
-        //handleCloseModal()
       }
     }
-    //handleCloseModal()
 
     window.location.reload()
   }
