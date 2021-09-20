@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal"
 import Button from "react-bootstrap/Button"
 import type { Track, Playlist } from "../Types"
 
-import "./NewPlaylistModal.css"
+import "./RemoveTrackModal.css"
 
 type modalProps = {
   showModal: boolean

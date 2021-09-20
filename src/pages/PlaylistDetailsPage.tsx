@@ -5,6 +5,7 @@ import type { Playlist } from "../Types"
 
 import "./PlaylistDetailsPage.css"
 import RemoveTrackModal from "../components/RemoveTrackModal"
+import RemovePlaylistModal from "../components/RemovePlaylistModal"
 
 type detailsProps = {
   playlist_id: number
@@ -12,7 +13,10 @@ type detailsProps = {
 
 const PlaylistDetails = ({ playlist_id }: detailsProps) => {
   const [playlist, setPlaylist] = useState<Playlist>()
-  const [showModal, setShowModal] = useState<boolean>(false)
+  const [showRemoveTrackModal, setShowRemoveTrackModal] =
+    useState<boolean>(false)
+  const [showRemovePlaylistModal, setShowRemovePlaylistModal] =
+    useState<boolean>(false)
   const [trackID, setTrackID] = useState<number>()
 
   useEffect(() => {
@@ -21,9 +25,12 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
     }
   }, [])
 
-  const handleModalClick = (i: number) => {
+  const handleTrackModalClick = (i: number) => {
     setTrackID(i)
-    setShowModal(true)
+    setShowRemoveTrackModal(true)
+  }
+  const handlePlaylistModalClick = () => {
+    setShowRemovePlaylistModal(true)
   }
 
   return playlist ? (
@@ -42,7 +49,7 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
                 </p>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button onClick={() => handleModalClick(i)}>X</Button>
+                <Button onClick={() => handleTrackModalClick(i)}>X</Button>
               </ListGroup.Item>
             </div>
           ))
@@ -52,16 +59,26 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
           </>
         )}
       </ListGroup>
+      <Button variant="danger" onClick={handlePlaylistModalClick}>
+        Remove Playlist
+      </Button>
+
       {trackID ? (
         <RemoveTrackModal
-          showModal={showModal}
-          setShowModal={setShowModal}
+          showModal={showRemoveTrackModal}
+          setShowModal={setShowRemoveTrackModal}
           selectedTrackID={trackID}
           playlist={playlist}
         />
       ) : (
         <></>
       )}
+
+      <RemovePlaylistModal
+        showModal={showRemovePlaylistModal}
+        setShowModal={setShowRemovePlaylistModal}
+        playlist={playlist}
+      />
     </>
   ) : (
     <></>
