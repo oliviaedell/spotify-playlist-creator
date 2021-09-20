@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
+//import axios from "axios"
 
 import NewPlaylistModal from "../components/NewPlaylistModal"
 import CurrentSongCard from "../components/CurrentSongCard"
@@ -44,12 +44,14 @@ const CurrentSong = () => {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken)
-      axios
-        .get(USER_ENDPOINT, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      fetch(USER_ENDPOINT, {
+        credentials: "omit",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
         .then((response) => {
-          setUser(response.data as User)
+          response.json().then((data) => setUser(data as User))
         })
         .catch((err) => console.log(err))
     }
@@ -59,14 +61,12 @@ const CurrentSong = () => {
   useEffect(() => {
     if (accessToken && user) {
       setInterval(() => {
-        axios
-          .get(CURRENTLY_PLAYING_ENDPOINT, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
+        fetch(CURRENTLY_PLAYING_ENDPOINT, {
+          credentials: "omit",
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
           .then((response) => {
-            setCurrentSong(response.data as Track)
+            response.json().then((data) => setCurrentSong(data as Track))
           })
           .catch((err) => console.log(err))
       }, 1000)
