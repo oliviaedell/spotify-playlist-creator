@@ -42,6 +42,7 @@ const CurrentSong = () => {
   /* set user */
   useEffect(() => {
     if (accessToken) {
+      localStorage.setItem("accessToken", accessToken)
       axios
         .get(USER_ENDPOINT, {
           headers: { Authorization: `Bearer ${accessToken}` },
