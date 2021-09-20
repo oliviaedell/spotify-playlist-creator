@@ -41,28 +41,23 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
       const newPlaylist: Playlist = {
         description: playlistDescription,
         name: playlistName,
-        tracks: {
-          items: [currentSong],
-        },
+        id: storedPlaylists.length,
+        tracks: [currentSong],
+
         type: "playlist",
       }
 
       if (storedPlaylists.length !== 0) {
-        setStoredPlaylists((storedPlaylists) => [
-          ...storedPlaylists,
-          newPlaylist,
-        ])
-        console.log(storedPlaylists)
-      } else {
-        console.log(newPlaylist)
-        const arr = new Array<Playlist>(newPlaylist)
-        console.log(arr)
+        const arr = new Array<Playlist>(...storedPlaylists, newPlaylist)
         setStoredPlaylists(arr)
-        setSubmitted(true)
+      } else {
+        const arr = new Array<Playlist>(newPlaylist)
+        setStoredPlaylists(arr)
       }
+      setSubmitted(true)
+      window.location.reload()
     }
-
-    window.location.reload()
+    //TODO else error
   }
   useEffect(() => {
     if (submitted) {
