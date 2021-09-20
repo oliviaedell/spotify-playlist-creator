@@ -17,7 +17,7 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
     useState<boolean>(false)
   const [showRemovePlaylistModal, setShowRemovePlaylistModal] =
     useState<boolean>(false)
-  const [trackID, setTrackID] = useState<number>()
+  const [trackIndex, setTrackIndex] = useState<number>()
 
   useEffect(() => {
     if (playlist_id || playlist_id === 0) {
@@ -26,9 +26,10 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
   }, [])
 
   const handleTrackModalClick = (i: number) => {
-    setTrackID(i)
+    setTrackIndex(i)
     setShowRemoveTrackModal(true)
   }
+
   const handlePlaylistModalClick = () => {
     setShowRemovePlaylistModal(true)
   }
@@ -38,7 +39,7 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
       <h1>Playlist Details</h1>
       <h2>{playlist.name}</h2>
       <ListGroup className="songList">
-        {playlist.tracks ? (
+        {playlist.tracks.length ? (
           playlist.tracks.map((track, i) => (
             <div className="d-flex">
               <ListGroup.Item className="trackInfo">
@@ -74,7 +75,7 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
           ))
         ) : (
           <>
-            <h1>no tracks </h1>
+            <p>no tracks </p>
           </>
         )}
       </ListGroup>
@@ -82,12 +83,11 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
         Remove Playlist
       </Button>
 
-      {/* TODO fix bugs */}
-      {trackID ? (
+      {trackIndex !== undefined ? (
         <RemoveTrackModal
           showModal={showRemoveTrackModal}
           setShowModal={setShowRemoveTrackModal}
-          selectedTrackID={trackID}
+          selectedTrackIndex={trackIndex}
           playlist={playlist}
         />
       ) : (

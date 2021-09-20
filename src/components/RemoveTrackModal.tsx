@@ -8,28 +8,29 @@ import "./RemoveTrackModal.css"
 type modalProps = {
   showModal: boolean
   setShowModal: (show: boolean) => void
-  selectedTrackID: number
+  selectedTrackIndex: number
   playlist: Playlist
 }
 
 const RemoveTrackModal = ({
   showModal,
   setShowModal,
-  selectedTrackID,
+  selectedTrackIndex,
   playlist,
 }: modalProps) => {
+  console.log(selectedTrackIndex)
   const [storedPlaylists, setStoredPlaylists] = useState<Array<Playlist>>([])
   const [selectedTrack, setSelectedTrack] = useState<Track>()
   const [removed, setRemoved] = useState<boolean>(false)
 
   useEffect(() => {
     setStoredPlaylists(JSON.parse(localStorage.playlists))
-    setSelectedTrack(playlist.tracks[selectedTrackID])
+    setSelectedTrack(playlist.tracks[selectedTrackIndex])
   }, [])
 
   const handleConfirmRemove = () => {
     if (storedPlaylists && playlist.tracks) {
-      playlist.tracks.splice(selectedTrackID, 1)
+      playlist.tracks.splice(selectedTrackIndex, 1)
       storedPlaylists[playlist.id].tracks = playlist.tracks
       setRemoved(true)
     }
