@@ -3,7 +3,11 @@ import Nav from "react-bootstrap/Nav"
 
 import "./Navi.css"
 
-const Navi = () => {
+type naviProps = {
+  loggedIn: boolean
+}
+
+const Navi = ({ loggedIn }: naviProps) => {
   const handleLogout = () => {
     localStorage.removeItem("accessToken")
   }
@@ -23,7 +27,7 @@ const Navi = () => {
               onClick={handleLogout}
               className="align-self-end"
             >
-              {window.location.pathname === "/login" ? "Log In" : "Log Out"}
+              {!loggedIn ? "Log In" : "Log Out"}
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

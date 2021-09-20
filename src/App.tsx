@@ -9,13 +9,13 @@ import Navi from "./components/Navi"
 
 import "./App.css"
 
-type AppProps = {
+type pageProps = {
   path: string
   queryString: string
   userLoggedIn: boolean //TODO useState to set userLoggedIn
 }
 
-const Page = ({ path, queryString, userLoggedIn }: AppProps) => {
+const Page = ({ path, queryString, userLoggedIn }: pageProps) => {
   const id_num: number = parseInt(queryString.split("=")[1])
 
   switch (path) {
@@ -38,14 +38,16 @@ const Page = ({ path, queryString, userLoggedIn }: AppProps) => {
 function App() {
   const [path, setPath] = useState<string>()
   const [queryString, setQueryString] = useState<string>()
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false)
 
   useEffect(() => {
     setPath(window.location.pathname.split("/")[1])
     setQueryString(window.location.href.split("?")[1])
-  }, [])
+    setUserLoggedIn(localStorage.accessToken)
+  }, [userLoggedIn])
   return (
     <div className="App">
-      <Navi />
+      <Navi loggedIn={userLoggedIn} />
       <Page
         path={path ? path : ""}
         queryString={queryString ? queryString : ""}
