@@ -5,6 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown"
 import Toast from "react-bootstrap/Toast"
 import Placeholder from "react-bootstrap/Placeholder"
 import type { Track, Playlist } from "../Types"
+import ErrorComponent from "../components/ErrorComponent"
 
 import "./CurrentSongCard.css"
 
@@ -20,12 +21,17 @@ const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
   const [newTracklist, setNewTracklist] = useState<Array<Track>>([])
   const [trackAdded, setTrackAdded] = useState<boolean>()
   const [showNewTrackAlert, setShowNewTrackAlert] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>("")
   // TODO const [showNewPlaylistAlert, setShowNewPlaylistAlert] =
   // useState<boolean>(false)
 
   useEffect(() => {
     if (localStorage.playlists) {
       setCurrentPlaylists(JSON.parse(localStorage.playlists))
+    } else {
+      setError(true)
+      setErrorMessage("Could not load playlists")
     }
   }, [])
 
@@ -51,7 +57,7 @@ const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
     }
   }, [trackAdded])
 
-  return (
+  return !error ? (
     <>
       <Card className="songCard" style={{ width: "18rem" }}>
         <Card.Body>
@@ -128,6 +134,10 @@ const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
             : ""}
         </Toast.Body>
       </Toast>
+    </>
+  ) : (
+    <>
+      <ErrorComponent message={errorMessage}></ErrorComponent>
     </>
   )
 }

@@ -67,7 +67,6 @@ const CurrentSong = () => {
         })
           .then((response) => {
             response.json().then((data) => setCurrentSong(data as Track))
-            //setContentLoaded(true)
           })
           .catch((err) => console.log(err))
       }, 1000)
