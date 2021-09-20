@@ -15,7 +15,7 @@ const Playlists = () => {
     <>
       <h1> Playlists</h1>
       <div className="card-deck d-flex flex-wrap">
-        {playlists ? (
+        {playlists.length ? (
           playlists.map((playlist, i) => (
             <Card
               className="playlist-card"
@@ -34,7 +34,7 @@ const Playlists = () => {
             </Card>
           ))
         ) : (
-          <></>
+          <p>no playlists</p>
         )}
       </div>
     </>
