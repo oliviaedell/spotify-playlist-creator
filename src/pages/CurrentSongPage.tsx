@@ -28,7 +28,6 @@ const CurrentSong = () => {
   const [currentSong, setCurrentSong] = useState<Track>()
   const [storedSongName, setStoredSongName] = useState<string>()
 
-  const [seconds, setSeconds] = useState<number>(0)
   const [showModal, setShowModal] = useState<boolean>(false)
 
   /* set access token */
