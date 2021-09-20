@@ -42,7 +42,6 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
       const newPlaylist: Playlist = {
         description: playlistDescription,
         name: playlistName,
-        id: storedPlaylists.length,
         tracks: [currentSong],
 
         type: "playlist",

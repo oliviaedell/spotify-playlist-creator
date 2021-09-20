@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react"
 
 import NewPlaylistModal from "../components/NewPlaylistModal"
 import CurrentSongCard from "../components/CurrentSongCard"
-import type { User, Track } from "../Types"
+import type { Track } from "../Types"
 import "./CurrentSongPage.css"
 
-const USER_ENDPOINT = "https://api.spotify.com/v1/me"
 const CURRENTLY_PLAYING_ENDPOINT =
   "https://api.spotify.com/v1/me/player/currently-playing"
 
@@ -24,7 +23,6 @@ const getAuthParams = (hash: string) => {
 
 const CurrentSong = () => {
   const [accessToken, setAccessToken] = useState<string>()
-  const [user, setUser] = useState<User>()
   const [currentSong, setCurrentSong] = useState<Track>()
   const [storedSongName, setStoredSongName] = useState<string>()
   const [contentLoaded, setContentLoaded] = useState<boolean>(false)
@@ -40,26 +38,15 @@ const CurrentSong = () => {
     }
   }, [])
 
-  /* set user */
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken)
-      fetch(USER_ENDPOINT, {
-        credentials: "omit",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-        .then((response) => {
-          response.json().then((data) => setUser(data as User))
-        })
-        .catch((err) => console.log(err))
     }
   }, [accessToken])
 
   /* set current song */
   useEffect(() => {
-    if (accessToken && user) {
+    if (accessToken) {
       setInterval(() => {
         fetch(CURRENTLY_PLAYING_ENDPOINT, {
           credentials: "omit",
@@ -71,7 +58,7 @@ const CurrentSong = () => {
           .catch((err) => console.log(err))
       }, 1000)
     }
-  }, [accessToken, user])
+  }, [accessToken])
 
   useEffect(() => {
     if (currentSong) {
@@ -80,13 +67,14 @@ const CurrentSong = () => {
   }, [currentSong])
 
   useEffect(() => {
-    if (accessToken && user && currentSong) {
+    if (accessToken && currentSong) {
+      //&&user
       if (!storedSongName || currentSong.item.name !== storedSongName) {
         setStoredSongName(currentSong.item.name)
         localStorage.setItem("currentSong", JSON.stringify(currentSong))
       }
     }
-  }, [accessToken, user, currentSong, storedSongName])
+  }, [accessToken, currentSong, storedSongName])
 
   return !accessToken ? (
     <>

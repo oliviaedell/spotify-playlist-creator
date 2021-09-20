@@ -10,6 +10,7 @@ type modalProps = {
   setShowModal: (show: boolean) => void
   selectedTrackIndex: number
   playlist: Playlist
+  playlistIndex: number
 }
 
 const RemoveTrackModal = ({
@@ -17,6 +18,7 @@ const RemoveTrackModal = ({
   setShowModal,
   selectedTrackIndex,
   playlist,
+  playlistIndex,
 }: modalProps) => {
   console.log(selectedTrackIndex)
   const [storedPlaylists, setStoredPlaylists] = useState<Array<Playlist>>([])
@@ -31,7 +33,7 @@ const RemoveTrackModal = ({
   const handleConfirmRemove = () => {
     if (storedPlaylists && playlist.tracks) {
       playlist.tracks.splice(selectedTrackIndex, 1)
-      storedPlaylists[playlist.id].tracks = playlist.tracks
+      storedPlaylists[playlistIndex].tracks = playlist.tracks
       setRemoved(true)
     }
   }

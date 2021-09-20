@@ -99,6 +99,7 @@ const PlaylistDetails = ({ playlistIndex }: detailsProps) => {
             setShowModal={setShowRemoveTrackModal}
             selectedTrackIndex={trackIndex}
             playlist={playlist}
+            playlistIndex={playlistIndex}
           />
         ) : (
           <></>
