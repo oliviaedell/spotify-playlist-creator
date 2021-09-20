@@ -29,7 +29,7 @@ const Page = ({ path, queryString, userLoggedIn }: AppProps) => {
       return <Playlists />
 
     case "playlist-details":
-      return <PlaylistDetails playlist_id={id_num} />
+      return <PlaylistDetails playlistIndex={id_num} />
 
     default:
       return userLoggedIn ? <CurrentSong /> : <Login />

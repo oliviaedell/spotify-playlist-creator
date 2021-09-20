@@ -9,10 +9,10 @@ import RemovePlaylistModal from "../components/RemovePlaylistModal"
 import ErrorComponent from "../components/ErrorComponent"
 
 type detailsProps = {
-  playlist_id: number
+  playlistIndex: number
 }
 
-const PlaylistDetails = ({ playlist_id }: detailsProps) => {
+const PlaylistDetails = ({ playlistIndex }: detailsProps) => {
   const [playlist, setPlaylist] = useState<Playlist>()
   const [showRemoveTrackModal, setShowRemoveTrackModal] =
     useState<boolean>(false)
@@ -23,8 +23,11 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
   const [errorMessage, setErrorMessage] = useState<string>("")
 
   useEffect(() => {
-    if (playlist_id !== undefined) {
-      setPlaylist(JSON.parse(localStorage.playlists)[playlist_id])
+    if (
+      playlistIndex !== undefined &&
+      playlistIndex < localStorage.playlists.length - 1
+    ) {
+      setPlaylist(JSON.parse(localStorage.playlists)[playlistIndex])
     } else {
       setError(true)
       setErrorMessage("Could not load playlist")
@@ -105,6 +108,7 @@ const PlaylistDetails = ({ playlist_id }: detailsProps) => {
           showModal={showRemovePlaylistModal}
           setShowModal={setShowRemovePlaylistModal}
           playlist={playlist}
+          playlistIndex={playlistIndex}
         />
       </>
     ) : (
