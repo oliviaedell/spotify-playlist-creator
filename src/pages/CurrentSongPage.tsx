@@ -36,6 +36,9 @@ const CurrentSong = () => {
     if (window.location.hash) {
       const authParams = getAuthParams(window.location.hash.substring(1))
       setAccessToken(authParams["access_token"])
+    } else if (localStorage.accessToken) {
+      console.log("get access token")
+      setAccessToken(localStorage.accessToken)
     }
   }, [])
 
@@ -83,7 +86,7 @@ const CurrentSong = () => {
 
   return (
     <>
-      <h1>Current Song</h1>
+      <h3>You are currently listening to: </h3>
       {currentSong ? (
         <>
           <CurrentSongCard
