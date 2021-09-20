@@ -1,11 +1,13 @@
+import { useEffect, useState } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
-import "./App.css"
 
 import Login from "./pages/LoginPage"
 import CurrentSong from "./pages/CurrentSongPage"
 import Playlists from "./pages/PlaylistsPage"
 import PlaylistDetails from "./pages/PlaylistDetailsPage"
-import { useEffect, useState } from "react"
+import Navi from "./components/Navi"
+
+import "./App.css"
 
 type AppProps = {
   path: string
@@ -43,6 +45,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      <Navi />
       <Page
         path={path ? path : ""}
         queryString={queryString ? queryString : ""}
