@@ -88,7 +88,7 @@ type Track = {
       spotify?: string
     }
     href?: string
-    id?: string
+    id: number
     name: string
     popularity?: number
     preview_url?: string
@@ -101,6 +101,7 @@ type Track = {
 type Playlist = {
   description?: string
   name: string
+  id: number
   owner?: {
     external_urls?: {
       spotify?: string
@@ -110,9 +111,8 @@ type Playlist = {
     type?: string
     uri?: string
   }
-  tracks?: {
-    items: Track[]
-  }
+  tracks: Array<Track>
+
   type?: string
   uri?: string
 }
