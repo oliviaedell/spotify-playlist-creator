@@ -1,29 +1,37 @@
 import { useEffect, useState } from "react"
-import { ToastHeader } from "react-bootstrap"
+import { Container, ToastHeader } from "react-bootstrap"
 import Card from "react-bootstrap/Card"
 import Dropdown from "react-bootstrap/Dropdown"
 import Toast from "react-bootstrap/Toast"
+import Placeholder from "react-bootstrap/Placeholder"
 import type { Track, Playlist } from "../Types"
+import ErrorComponent from "../components/ErrorComponent"
 
 import "./CurrentSongCard.css"
 
 type cardProps = {
-  currentSong: Track
+  currentSong: Track | undefined
+  loaded: boolean
   setShowModal: (show: boolean) => void
 }
 
-const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
+const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
   const [currentPlaylists, setCurrentPlaylists] = useState<Array<Playlist>>()
   const [selectedPlaylistID, setSelectedPlaylistID] = useState<number>(-1)
   const [newTracklist, setNewTracklist] = useState<Array<Track>>([])
   const [trackAdded, setTrackAdded] = useState<boolean>()
   const [showNewTrackAlert, setShowNewTrackAlert] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>("")
   // TODO const [showNewPlaylistAlert, setShowNewPlaylistAlert] =
   // useState<boolean>(false)
 
   useEffect(() => {
     if (localStorage.playlists) {
       setCurrentPlaylists(JSON.parse(localStorage.playlists))
+    } else {
+      setError(true)
+      setErrorMessage("Could not load playlists")
     }
   }, [])
 
@@ -33,7 +41,7 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
 
   const handleAddTrack = (playlistID: number) => {
     //add track to playlist in local storage using setCurrentPlaylists
-    if (currentPlaylists) {
+    if (currentPlaylists && currentSong) {
       setSelectedPlaylistID(playlistID)
       setNewTracklist([...currentPlaylists[playlistID].tracks, currentSong])
       currentPlaylists[playlistID].tracks = newTracklist
@@ -49,50 +57,68 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
     }
   }, [trackAdded])
 
-  return (
+  return !error ? (
     <>
       <Card className="songCard" style={{ width: "18rem" }}>
         <Card.Body>
-          <Card.Img
-            className="albumImg"
-            variant="top"
-            src={
-              currentSong.item.album.images
-                ? currentSong.item.album.images[0].url
-                : ""
-            }
-          />
-          <Card.Title>
-            {currentSong ? `${currentSong.item.name}` : ""}
-          </Card.Title>
-          <Card.Subtitle>
-            {currentSong ? `${currentSong.item.artists[0].name}` : ""}
-          </Card.Subtitle>
-          <Dropdown>
-            <Dropdown.Toggle variant="outline-dark">
-              Add to Playlist
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                className="newPlaylistItem"
-                onClick={handleShowModal}
+          <Container className={`loadedContent ${!loaded ? "hidden" : ""}`}>
+            <Card.Img
+              className="albumImg"
+              variant="top"
+              src={
+                currentSong?.item.album.images
+                  ? currentSong?.item.album.images[0].url
+                  : ""
+              }
+            />
+            <Card.Title>
+              {currentSong ? `${currentSong.item.name}` : ""}
+            </Card.Title>
+            <Card.Subtitle>
+              {currentSong ? `${currentSong.item.artists[0].name}` : ""}
+            </Card.Subtitle>
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="outline-dark"
+                style={{ width: "10rem" }}
               >
-                Create New Playlist
-              </Dropdown.Item>
-              {currentPlaylists ? (
-                currentPlaylists.map((playlist, i) => (
-                  <Dropdown.Item
-                    className="existingPlaylistItem"
-                    onClick={() => handleAddTrack(i)}
-                  >
-                    {playlist.name}
-                  </Dropdown.Item>
-                ))
-              ) : (
-                <></>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
+                Add to Playlist
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  className="newPlaylistItem"
+                  onClick={handleShowModal}
+                >
+                  Create New Playlist
+                </Dropdown.Item>
+                {currentPlaylists ? (
+                  currentPlaylists.map((playlist, i) => (
+                    <Dropdown.Item
+                      className="existingPlaylistItem"
+                      onClick={() => handleAddTrack(i)}
+                    >
+                      {playlist.name}
+                    </Dropdown.Item>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Dropdown.Menu>
+            </Dropdown>
+          </Container>
+          <Container className={`placeholderContent ${loaded ? "hidden" : ""}`}>
+            <Card.Img
+              src="https://dummyimage.com/640x640/e0e0e0/e0e0e0.png&text=++"
+              className="albumImg"
+              variant="top"
+            />
+            <Placeholder as={Card.Title} animation="glow">
+              <Placeholder xs={6} />
+            </Placeholder>
+            <Placeholder as={Card.Subtitle} animation="glow">
+              <Placeholder xs={3} />
+            </Placeholder>
+          </Container>
         </Card.Body>
       </Card>
 
@@ -108,6 +134,10 @@ const CurrentSongCard = ({ currentSong, setShowModal }: cardProps) => {
             : ""}
         </Toast.Body>
       </Toast>
+    </>
+  ) : (
+    <>
+      <ErrorComponent message={errorMessage}></ErrorComponent>
     </>
   )
 }

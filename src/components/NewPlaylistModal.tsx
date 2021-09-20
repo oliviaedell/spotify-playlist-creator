@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
 import Form from "react-bootstrap/Form"
+import ErrorComponent from "../components/ErrorComponent"
 import type { Track, Playlist } from "../Types"
 
 import "./NewPlaylistModal.css"
@@ -17,6 +18,8 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
   const [playlistName, setPlaylistName] = useState<string>()
   const [playlistDescription, setPlaylistDescription] = useState<string>()
   const [submitted, setSubmitted] = useState<boolean>(false)
+  const [error, setError] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>("")
 
   useEffect(() => {
     //get playlists from storage
@@ -54,6 +57,9 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
       }
       setSubmitted(true)
       window.location.reload()
+    } else {
+      setError(true)
+      setErrorMessage("Please give playlist a name")
     }
   }
   useEffect(() => {
@@ -104,7 +110,9 @@ const NewPlaylistModal = ({ show, setShow, currentSong }: modalProps) => {
           </Form>
         </Modal.Body>
 
-        <Modal.Footer></Modal.Footer>
+        <Modal.Footer>
+          {error ? <ErrorComponent message={errorMessage} /> : <></>}
+        </Modal.Footer>
       </Modal>
     </>
   )

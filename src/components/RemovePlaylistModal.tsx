@@ -25,8 +25,6 @@ const RemovePlaylistModal = ({
   }, [])
 
   const handleConfirmRemove = () => {
-    console.log(currentPlaylists.length)
-    console.log(playlist.id)
     currentPlaylists.splice(playlist.id, 1)
     setRemoved(true)
   }
