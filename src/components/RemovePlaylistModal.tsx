@@ -10,12 +10,14 @@ type modalProps = {
   showModal: boolean
   setShowModal: (show: boolean) => void
   playlist: Playlist
+  playlistIndex: number
 }
 
 const RemovePlaylistModal = ({
   showModal,
   setShowModal,
   playlist,
+  playlistIndex,
 }: modalProps) => {
   const [currentPlaylists, setCurrentPlaylists] = useState<Array<Playlist>>([])
   const [removed, setRemoved] = useState<boolean>(false)
@@ -25,7 +27,7 @@ const RemovePlaylistModal = ({
   }, [])
 
   const handleConfirmRemove = () => {
-    currentPlaylists.splice(playlist.id, 1)
+    currentPlaylists.splice(playlistIndex, 1)
     setRemoved(true)
   }
 
@@ -35,7 +37,8 @@ const RemovePlaylistModal = ({
       localStorage.setItem("playlists", JSON.stringify(currentPlaylists))
       setRemoved(false)
       setShowModal(false)
-      window.location.pathname = "/playlists"
+      const url: string = window.location.href
+      window.location.pathname = url.split("?")[0]
     }
   }, [removed])
 

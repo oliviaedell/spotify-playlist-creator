@@ -39,12 +39,12 @@ const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
     setShowModal(true)
   }
 
-  const handleAddTrack = (playlistID: number) => {
+  const handleAddTrack = (playlistIndex: number) => {
     //add track to playlist in local storage using setCurrentPlaylists
     if (currentPlaylists && currentSong) {
-      setSelectedPlaylistID(playlistID)
-      setNewTracklist([...currentPlaylists[playlistID].tracks, currentSong])
-      currentPlaylists[playlistID].tracks = newTracklist
+      setSelectedPlaylistID(playlistIndex)
+      setNewTracklist([...currentPlaylists[playlistIndex].tracks, currentSong])
+      currentPlaylists[playlistIndex].tracks = newTracklist
       setTrackAdded(true)
     }
   }
