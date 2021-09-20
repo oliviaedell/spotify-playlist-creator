@@ -16,7 +16,7 @@ type cardProps = {
 }
 
 const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
-  const [currentPlaylists, setCurrentPlaylists] = useState<Array<Playlist>>()
+  const [currentPlaylists, setCurrentPlaylists] = useState<Array<Playlist>>([])
   const [selectedPlaylistID, setSelectedPlaylistID] = useState<number>(-1)
   const [newTracklist, setNewTracklist] = useState<Array<Track>>([])
   const [trackAdded, setTrackAdded] = useState<boolean>()
@@ -29,9 +29,6 @@ const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
   useEffect(() => {
     if (localStorage.playlists) {
       setCurrentPlaylists(JSON.parse(localStorage.playlists))
-    } else {
-      setError(true)
-      setErrorMessage("Could not load playlists")
     }
   }, [])
 
@@ -137,7 +134,8 @@ const CurrentSongCard = ({ currentSong, setShowModal, loaded }: cardProps) => {
     </>
   ) : (
     <>
-      <ErrorComponent message={errorMessage}></ErrorComponent>
+      {" "}
+      <ErrorComponent message={errorMessage}></ErrorComponent>{" "}
     </>
   )
 }

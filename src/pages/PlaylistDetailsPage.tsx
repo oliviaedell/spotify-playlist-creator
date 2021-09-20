@@ -115,7 +115,9 @@ const PlaylistDetails = ({ playlistIndex }: detailsProps) => {
       <></>
     )
   ) : (
-    <ErrorComponent message={errorMessage} />
+    <>
+      <ErrorComponent message={errorMessage} />
+    </>
   )
 }
 
